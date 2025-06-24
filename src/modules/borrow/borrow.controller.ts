@@ -64,11 +64,13 @@ const borrowSummary = async (req: Request, res: Response) => {
       data: summary,
     });
   } catch (error) {
-    res.send({
-      success: false,
-      message: "Error happened",
-      error,
-    });
+    if (error instanceof Error && error.name === "ValidationError") {
+      res.status(400).json({
+        success: false,
+        message: "Validation failed",
+        error: error,
+      });
+    }
   }
 };
 

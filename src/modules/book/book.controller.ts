@@ -46,11 +46,13 @@ const getBooks = async (req: Request, res: Response) => {
       data: books,
     });
   } catch (error) {
-    res.send({
-      success: false,
-      message: "Error happened",
-      error,
-    });
+    if (error instanceof Error && error.name === "ValidationError") {
+      res.status(400).json({
+        success: false,
+        message: "Validation failed",
+        error: error,
+      });
+    }
   }
 };
 // get single book by id
@@ -65,11 +67,13 @@ const getBookById = async (req: Request, res: Response) => {
       data,
     });
   } catch (error) {
-    res.send({
-      success: false,
-      message: "Error happened",
-      error,
-    });
+    if (error instanceof Error && error.name === "ValidationError") {
+      res.status(400).json({
+        success: false,
+        message: "Validation failed",
+        error: error,
+      });
+    }
   }
 };
 
@@ -88,11 +92,13 @@ const updateBook = async (req: Request, res: Response) => {
       data,
     });
   } catch (error) {
-    res.send({
-      success: false,
-      message: "Error happened",
-      error,
-    });
+    if (error instanceof Error && error.name === "ValidationError") {
+      res.status(400).json({
+        success: false,
+        message: "Validation failed",
+        error: error,
+      });
+    }
   }
 };
 // delete book
