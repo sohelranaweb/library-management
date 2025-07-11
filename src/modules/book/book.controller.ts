@@ -121,7 +121,7 @@ const deleteBook = async (req: Request, res: Response) => {
 
   res.send({
     success: true,
-    message: "Mango Deleted Successfully",
+    message: "Book Deleted Successfully",
     data: null,
   });
 };

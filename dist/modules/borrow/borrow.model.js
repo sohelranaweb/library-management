@@ -76,6 +76,11 @@ borrowSchema.statics.borrowBook = function (bookId, quantity, dueDate) {
         // book exist or not
         if (!book)
             throw new Error("Book not Found");
+        // ✅ Validate dueDate
+        const parsedDueDate = new Date(dueDate);
+        if (isNaN(parsedDueDate.getTime()) || parsedDueDate <= new Date()) {
+            throw new Error("Due date must be in the future");
+        }
         // check book quantity
         if (book.copies < quantity) {
             throw new Error("Not enough copies available");
