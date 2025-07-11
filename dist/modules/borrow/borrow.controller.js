@@ -71,11 +71,13 @@ const borrowSummary = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
     catch (error) {
-        res.send({
-            success: false,
-            message: "Error happened",
-            error,
-        });
+        if (error instanceof Error && error.name === "ValidationError") {
+            res.status(400).json({
+                success: false,
+                message: "Validation failed",
+                error: error,
+            });
+        }
     }
 });
 exports.borrowController = {

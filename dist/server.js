@@ -18,7 +18,10 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const config_1 = __importDefault(require("./config"));
 const routes_1 = __importDefault(require("./modules/routes"));
 const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: 'http://localhost:5173', // your frontend origin
+    credentials: true,
+}));
 app.use(express_1.default.json());
 app.use(routes_1.default);
 app.get("/", (req, res) => {

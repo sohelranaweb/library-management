@@ -22,6 +22,17 @@ const createBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
     catch (error) {
+        // ✅ Handle duplicate ISBN error
+        if (typeof error === "object" &&
+            error !== null &&
+            "code" in error &&
+            error.code === 11000) {
+            res.status(400).json({
+                success: false,
+                message: "ISBN already exists.",
+                field: "isbn",
+            });
+        }
         if (error instanceof Error && error.name === "ValidationError") {
             res.status(400).json({
                 success: false,
@@ -37,15 +48,15 @@ const getBooks = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const filter = req.query.filter;
         const sortBy = req.query.sortBy || "createdAt";
         const sort = req.query.sort === "asc" ? 1 : -1;
-        const limit = parseInt(req.query.limit) || 10;
+        // const limit = parseInt(req.query.limit as string) || 10;
         // const data = await Book.find();
         const query = {};
         if (filter) {
             query.genre = filter;
         }
         const books = yield book_model_1.Book.find(query)
-            .sort({ [sortBy]: sort })
-            .limit(limit);
+            .sort({ [sortBy]: sort });
+        // .limit(limit);
         res.send({
             success: true,
             message: "Books retrieved Successfully",
@@ -53,11 +64,13 @@ const getBooks = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
     catch (error) {
-        res.send({
-            success: false,
-            message: "Error happened",
-            error,
-        });
+        if (error instanceof Error && error.name === "ValidationError") {
+            res.status(400).json({
+                success: false,
+                message: "Validation failed",
+                error: error,
+            });
+        }
     }
 });
 // get single book by id
@@ -72,11 +85,13 @@ const getBookById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
     }
     catch (error) {
-        res.send({
-            success: false,
-            message: "Error happened",
-            error,
-        });
+        if (error instanceof Error && error.name === "ValidationError") {
+            res.status(400).json({
+                success: false,
+                message: "Validation failed",
+                error: error,
+            });
+        }
     }
 });
 // update book
@@ -94,11 +109,13 @@ const updateBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
     catch (error) {
-        res.send({
-            success: false,
-            message: "Error happened",
-            error,
-        });
+        if (error instanceof Error && error.name === "ValidationError") {
+            res.status(400).json({
+                success: false,
+                message: "Validation failed",
+                error: error,
+            });
+        }
     }
 });
 // delete book

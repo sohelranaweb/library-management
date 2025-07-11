@@ -12,6 +12,19 @@ const createBook = async (req: Request, res: Response) => {
       data,
     });
   } catch (error) {
+     // ✅ Handle duplicate ISBN error
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      (error as any).code === 11000
+    ) {
+       res.status(400).json({
+        success: false,
+        message: "ISBN already exists.",
+        field: "isbn",
+      });
+    }
     if (error instanceof Error && error.name === "ValidationError") {
       res.status(400).json({
         success: false,
@@ -28,7 +41,7 @@ const getBooks = async (req: Request, res: Response) => {
     const filter = req.query.filter as string;
     const sortBy = (req.query.sortBy as string) || "createdAt";
     const sort = req.query.sort === "asc" ? 1 : -1;
-    const limit = parseInt(req.query.limit as string) || 10;
+    // const limit = parseInt(req.query.limit as string) || 10;
 
     // const data = await Book.find();
     const query: Record<string, any> = {};
@@ -38,7 +51,7 @@ const getBooks = async (req: Request, res: Response) => {
 
     const books = await Book.find(query)
       .sort({ [sortBy]: sort })
-      .limit(limit);
+      // .limit(limit);
 
     res.send({
       success: true,
