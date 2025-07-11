@@ -30,45 +30,6 @@ const borrowSchema = new Schema<IBorrow>(
   }
 );
 
-// copy erro handle 
-// borrowSchema.statics.borrowBook = async function (
-//   bookId: string,
-//   quantity: number,
-//   dueDate: Date | string
-// ) {
-//   const book = await Book.findById(bookId);
-//   if (!book) throw new Error("Book not found");
-
-//   // ✅ Validate dueDate
-//   const parsedDueDate = new Date(dueDate);
-//   if (isNaN(parsedDueDate.getTime()) || parsedDueDate <= new Date()) {
-//     throw new Error("Due date must be in the future");
-//   }
-
-//   // ✅ Validate quantity
-//   if (book.copies < quantity) {
-//     throw new Error("Not enough copies available");
-//   }
-
-//   // ✅ Create borrow record
-//   const borrowRecord = await this.create({
-//     book: bookId,
-//     quantity,
-//     dueDate: parsedDueDate,
-//   });
-
-//   // ✅ Update book only if record is successfully created
-//   book.copies -= quantity;
-//   if (book.copies === 0) {
-//     book.available = false;
-//   }
-//   await book.save();
-//   return borrowRecord;
-// };
-
-
-
-
 
 // static method
 borrowSchema.statics.borrowBook = async function (bookId, quantity, dueDate) {
